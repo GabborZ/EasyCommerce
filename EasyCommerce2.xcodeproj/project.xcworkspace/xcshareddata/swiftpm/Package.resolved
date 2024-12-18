@@ -1,0 +1,24 @@
+{
+  "originHash" : "d11446253924c45bb1959c8e60d90e31dce88a785861960ca9fd4d357975e1d2",
+  "pins" : [
+    {
+      "identity" : "dotlottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LottieFiles/dotlottie-ios",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8121da545e281c51fa03326af5ca216ac3570ecc"
+      }
+    },
+    {
+      "identity" : "generative-ai-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/generative-ai-swift",
+      "state" : {
+        "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd",
+        "version" : "0.5.6"
+      }
+    }
+  ],
+  "version" : 3
+}

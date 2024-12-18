@@ -67,13 +67,13 @@ struct CameraPlaceholderView: View {
                                             .fill(Color.primarycolor)
                                     )
                                     .padding(.horizontal, 40)
-                                    .offset(y: 40) // Lower the bubble slightly
+                                    .offset(y: 20) // Lower the bubble slightly
 
                                     // Triangle (Bubble Tail)
                                     Triangle()
                                         .fill(Color.primarycolor)
                                         .frame(width: 30, height: 60)
-                                        .offset(x: -80, y: -45) // Align to top-right of the bubble
+                                        .offset(x: -80, y: -65) // Align to top-right of the bubble
                                         .rotationEffect(.degrees(-45), anchor: .topLeading) // Rotates 45 degrees around top-left corner
                                 }
 

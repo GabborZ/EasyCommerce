@@ -1,3 +1,4 @@
+## Welcome to EasyCommerce!
 EasyCommerce is an innovative application designed to streamline e-commerce processes by identifying clothing, extracting essential details, and generating comprehensive descriptions. Whether you’re managing an online store or need efficient cataloging, this app simplifies the workflow by integrating cutting-edge AI technology.
 
 ## Features

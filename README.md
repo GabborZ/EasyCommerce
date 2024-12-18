@@ -16,7 +16,7 @@ EasyCommerce is an innovative application designed to streamline e-commerce proc
   - Edit and save AI-generated descriptions for future reference.
 
 - **User-friendly UI for Accessibility:**
-  -Voice over controls work perfectly both in menus and camera.
-  -The two steps button method makes the application's usage very intuitive and easy.
+  - Voice over controls work perfectly both in menus and camera.
+  - The two steps button method makes the application's usage very intuitive and easy.
   
 

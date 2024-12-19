@@ -13,7 +13,8 @@ struct CameraView: View {
     @ObservedObject var viewModel = CameraViewModel()
     @EnvironmentObject var libraryManager: PhotoLibraryManager
     @Binding var isPresented: Bool // Binding to track presentation state
-    
+    @State private var isTorchOn: Bool = false // Track torch state
+
     var body: some View {
         ZStack {
             // Camera Preview
@@ -29,6 +30,7 @@ struct CameraView: View {
             VStack {
                 Spacer()
 
+         
                 // Detected Clothing and Color Info
                 VStack(spacing: 10) {
                     if let detectedObject = viewModel.detectedObject {
@@ -48,12 +50,12 @@ struct CameraView: View {
                         green: viewModel.extractedRGB.green,
                         blue: viewModel.extractedRGB.blue
                     )
-                    .opacity(0.8) // Slight transparency to make it less obtrusive
+                    .opacity(0.8)
                 )
                 .cornerRadius(10)
                 .padding()
 
-                // Take Photo Button
+                // Take Photo Button with Torch Button
                 HStack {
                     Spacer()
 
@@ -80,19 +82,56 @@ struct CameraView: View {
                             .padding()
                     }
 
+                    // Torch Button
+                    Button(action: toggleTorch) {
+                        Image(systemName: isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20) // Keep dimensions as before
+                            .foregroundColor(.white)
+                            .padding(10)
+                            .background(Color.black.opacity(0.6))
+                            .clipShape(Circle())
+                    }
+
                     Spacer()
                 }
                 .padding(.horizontal)
             }
         }
         .onAppear {
-            viewModel.startSession() // Automatically start the camera session when appearing
+            viewModel.startSession()
         }
         .onDisappear {
-            viewModel.captureSession.stopRunning() // Stop session when camera view is dismissed
+            viewModel.captureSession.stopRunning()
+            turnOffTorch()
         }
     }
-}
+    private func toggleTorch() {
+           guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
+               print("Torch not available")
+               return
+           }
+           do {
+               try device.lockForConfiguration()
+               device.torchMode = isTorchOn ? .off : .on
+               isTorchOn.toggle()
+               device.unlockForConfiguration()
+           } catch {
+               print("Torch could not be used: \(error.localizedDescription)")
+           }
+       }
+
+       private func turnOffTorch() {
+           guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else { return }
+           do {
+               try device.lockForConfiguration()
+               device.torchMode = .off
+               device.unlockForConfiguration()
+           } catch {
+               print("Failed to turn off torch: \(error.localizedDescription)")
+           }
+       }
+   }
 // CameraPreview Implementation
 
 struct CameraPreview: UIViewRepresentable {

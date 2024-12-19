@@ -12,13 +12,13 @@ import Vision
 struct TextRecognitionView: View {
     @ObservedObject var viewModel = CameraViewModel()
     @EnvironmentObject var libraryManager: PhotoLibraryManager
-    @Binding var isPresented: Bool // Add this binding to control dismissal
-
+    @Binding var isPresented: Bool
     @State private var recognizedText: String = ""
     @State private var capturedImage: UIImage? = nil
     @State private var isShowingPhotoPicker = false
     @State private var selectedPhotoID: String? = nil
-    
+    @State private var isTorchOn: Bool = false // Track torch state
+
     var body: some View {
         ZStack {
             CameraPreview(session: viewModel.captureSession)
@@ -27,8 +27,20 @@ struct TextRecognitionView: View {
             VStack {
                 Spacer()
 
-                // Show options after text is recognized
+                // Torch Button
+                Button(action: toggleTorch) {
+                    Image(systemName: isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .background(Color.black.opacity(0.6))
+                        .clipShape(Circle())
+                }
+                .padding(.bottom, 20)
+
                 if let image = capturedImage, !recognizedText.isEmpty {
+                    // Recognized Text Options
                     VStack(spacing: 10) {
                         Text("Recognized Text:")
                             .font(.headline)
@@ -60,15 +72,14 @@ struct TextRecognitionView: View {
                                     libraryManager: libraryManager,
                                     selectedPhotoID: $selectedPhotoID
                                 ) { selectedPhotoID in
-                                    print("PhotoPickerView dismissed with selected ID: \(selectedPhotoID)")
                                     saveTextPhoto(capturedImage!)
-                                    isPresented = false // Dismiss after association
+                                    isPresented = false
                                 }
                             }
 
                             Button(action: {
                                 saveTextPhoto(image)
-                                isPresented = false // Dismiss after saving standalone photo
+                                isPresented = false
                                 resetView()
                             }) {
                                 Text("Save Standalone")
@@ -82,6 +93,8 @@ struct TextRecognitionView: View {
                         .padding(.horizontal)
                     }
                 } else {
+                    
+                    // Capture Text Button
                     Button(action: {
                         viewModel.capturePhoto { image in
                             if let image = image {
@@ -106,9 +119,33 @@ struct TextRecognitionView: View {
         }
         .onDisappear {
             viewModel.captureSession.stopRunning()
+            turnOffTorch()
         }
     }
-
+    private func toggleTorch() {
+        guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
+            print("Torch not available")
+            return
+        }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = isTorchOn ? .off : .on
+            isTorchOn.toggle()
+            device.unlockForConfiguration()
+        } catch {
+            print("Torch could not be used: \(error.localizedDescription)")
+        }
+    }
+    private func turnOffTorch() {
+        guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else { return }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = .off
+            device.unlockForConfiguration()
+        } catch {
+            print("Failed to turn off torch: \(error.localizedDescription)")
+        }
+    }
     private func saveTextPhoto(_ image: UIImage) {
         let text = recognizedText
         if let photoID = selectedPhotoID, !photoID.isEmpty {
@@ -130,6 +167,8 @@ struct TextRecognitionView: View {
         isShowingPhotoPicker = false
     }
 }
+
+ 
 struct PhotoPickerView: View {
     @ObservedObject var libraryManager: PhotoLibraryManager
     @Binding var selectedPhotoID: String?

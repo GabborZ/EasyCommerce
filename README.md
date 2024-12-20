@@ -1,4 +1,5 @@
-[Animation - 1733784041534](https://github.com/user-attachments/assets/204179d2-8ddc-469e-bdc8-c6ec7cddd490)
+<script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+<dotlottie-player src="https://lottie.host/d1487400-e785-484a-83d2-fa4a5763e906/ve12RNVVnQ.lottie" background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
 ## Welcome to EasyCommerce!!
 EasyCommerce is an innovative application designed to streamline e-commerce processes by identifying clothing, extracting essential details, and generating comprehensive descriptions. Whether you’re managing an online store or need efficient cataloging, this app simplifies the workflow by integrating cutting-edge AI technology.
 

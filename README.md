@@ -1,4 +1,5 @@
-## Welcome to EasyCommerce!
+[Animation - 1733784041534](https://github.com/user-attachments/assets/204179d2-8ddc-469e-bdc8-c6ec7cddd490)
+## Welcome to EasyCommerce!!
 EasyCommerce is an innovative application designed to streamline e-commerce processes by identifying clothing, extracting essential details, and generating comprehensive descriptions. Whether you’re managing an online store or need efficient cataloging, this app simplifies the workflow by integrating cutting-edge AI technology.
 
 ## Features
